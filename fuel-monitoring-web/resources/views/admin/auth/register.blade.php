@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Fuel Monitoring Admin</title>
+    <title>Daftar Akun Admin - Fuel Monitoring</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,11 +13,13 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #3b82f6 100%);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 24px 0;
         }
 
         body::before {
@@ -49,6 +51,7 @@
             padding: 48px 40px;
             width: 100%;
             max-width: 420px;
+            margin: auto;
             box-shadow: 0 25px 50px rgba(0,0,0,0.25);
             position: relative;
             z-index: 1;
@@ -56,7 +59,7 @@
 
         .login-header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 28px;
         }
 
         .login-logo {
@@ -86,7 +89,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -166,9 +169,24 @@
 
         .login-footer {
             text-align: center;
-            margin-top: 24px;
+            margin-top: 20px;
             font-size: 13px;
             color: #9ca3af;
+        }
+
+        .login-footer a {
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -178,18 +196,37 @@
             <div class="login-logo">
                 <i class="fas fa-gas-pump"></i>
             </div>
-            <h1>Fuel Monitoring</h1>
-            <p>Admin Panel Login</p>
+            <h1>Daftar Akun Admin</h1>
+            <p>Registrasi akun admin baru</p>
         </div>
 
-        <form method="POST" action="{{ route('admin.login.submit') }}">
+        @if(session('success'))
+            <div class="alert-success">{{ session('success') }}</div>
+        @endif
+
+        <form method="POST" action="{{ route('admin.register.submit') }}">
             @csrf
+
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="name">Nama Lengkap *</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror"
+                           value="{{ old('name') }}" placeholder="Nama admin" required autofocus>
+                </div>
+                @error('name')
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
                 <div class="input-wrapper">
                     <i class="fas fa-envelope"></i>
                     <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                           value="{{ old('email') }}" placeholder="admin@example.com" required autofocus>
+                           value="{{ old('email') }}" placeholder="admin@example.com" required>
                 </div>
                 @error('email')
                     <div class="invalid-feedback">
@@ -199,11 +236,11 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Password *</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                           placeholder="••••••••" required>
+                           placeholder="Minimal 6 karakter" required>
                 </div>
                 @error('password')
                     <div class="invalid-feedback">
@@ -212,17 +249,50 @@
                 @enderror
             </div>
 
+            <div class="form-group">
+                <label for="password_confirmation">Konfirmasi Password *</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control"
+                           placeholder="Ulangi password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telepon</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                           value="{{ old('phone') }}" placeholder="08xxxxxxxxxx">
+                </div>
+                @error('phone')
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="employee_id">ID Karyawan</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="employee_id" name="employee_id" class="form-control @error('employee_id') is-invalid @enderror"
+                           value="{{ old('employee_id') }}" placeholder="ADM001">
+                </div>
+                @error('employee_id')
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <button type="submit" class="btn-login">
-                <i class="fas fa-sign-in-alt"></i> Masuk
+                <i class="fas fa-user-plus"></i> Daftar
             </button>
         </form>
 
         <div class="login-footer">
-            Belum punya akun? <a href="{{ route('admin.register') }}" style="color:#3b82f6;font-weight:600;text-decoration:none;">Daftar akun</a>
-        </div>
-
-        <div class="login-footer">
-            &copy; {{ date('Y') }} Fuel Monitoring System
+            Sudah punya akun? <a href="{{ route('admin.login') }}">Masuk di sini</a>
         </div>
     </div>
 </body>

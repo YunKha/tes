@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 // Admin Auth Routes
 Route::get('/login', [AuthController::class , 'showLogin'])->name('admin.login');
 Route::post('/login', [AuthController::class , 'login'])->name('admin.login.submit');
+Route::get('/register', [AuthController::class , 'showRegister'])->name('admin.register');
+Route::post('/register', [AuthController::class , 'register'])->name('admin.register.submit');
 
 // Redirect root to admin dashboard
 Route::get('/', function () {
@@ -37,8 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/monitoring/{ticket}', [MonitoringController::class , 'show'])->name('admin.monitoring.show');
 
     // Drivers
+    // Drivers
     Route::get('/drivers', [DriverController::class , 'index'])->name('admin.drivers.index');
     Route::get('/drivers/create', [DriverController::class , 'create'])->name('admin.drivers.create');
     Route::post('/drivers', [DriverController::class , 'store'])->name('admin.drivers.store');
     Route::get('/drivers/{driver}', [DriverController::class , 'show'])->name('admin.drivers.show');
+    Route::get('/drivers/{driver}/edit', [DriverController::class , 'edit'])->name('admin.drivers.edit');
+    Route::put('/drivers/{driver}', [DriverController::class , 'update'])->name('admin.drivers.update');
+    Route::delete('/drivers/{driver}', [DriverController::class , 'destroy'])->name('admin.drivers.destroy');
 });

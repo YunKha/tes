@@ -42,8 +42,16 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.drivers.show', $driver) }}" class="btn btn-sm btn-secondary">
-                                        <i class="fas fa-eye"></i> Detail
+                                        <i class="fas fa-eye"></i>
                                     </a>
+                                    <a href="{{ route('admin.drivers.edit', $driver) }}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('admin.drivers.destroy', $driver) }}" method="POST" class="inline-form" style="display:inline;" onsubmit="return confirm('Yakin hapus sopir {{ $driver->name }}?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
